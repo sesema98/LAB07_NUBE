@@ -26,13 +26,16 @@ echo "[1/7] Instalando paquetes base..."
 sudo apt update
 sudo apt install -y curl git nginx build-essential ca-certificates
 
-if ! command -v node >/dev/null 2>&1; then
-  echo "[2/7] Instalando Node.js 20..."
+if ! command -v node >/dev/null 2>&1 || ! command -v npm >/dev/null 2>&1; then
+  echo "[2/7] Instalando Node.js 20 y npm..."
   curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
   sudo apt install -y nodejs
 else
   echo "[2/7] Node.js ya esta instalado: $(node -v)"
+  echo "[2/7] npm ya esta instalado: $(npm -v)"
 fi
+
+hash -r
 
 echo "[3/7] Instalando dependencias npm..."
 cd "${APP_DIR}"
