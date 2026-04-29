@@ -90,7 +90,22 @@ sudo systemctl restart nginx
 
 echo "[7/7] Estado final..."
 sudo systemctl status ${SITE_NAME} --no-pager || true
-curl -fsS http://${APP_HOST}:${APP_PORT}/health || true
+
+health_ok=0
+for _ in 1 2 3 4 5 6 7 8 9 10; do
+  if curl -fsS http://${APP_HOST}:${APP_PORT}/health >/dev/null 2>&1; then
+    health_ok=1
+    break
+  fi
+  sleep 1
+done
+
+if [[ "${health_ok}" -eq 1 ]]; then
+  curl -fsS http://${APP_HOST}:${APP_PORT}/health || true
+else
+  echo "La app no respondio a tiempo en http://${APP_HOST}:${APP_PORT}/health"
+  sudo journalctl -u ${SITE_NAME} -n 50 --no-pager || true
+fi
 
 echo
 echo "Despliegue completado."
