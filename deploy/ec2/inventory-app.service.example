@@ -1,0 +1,17 @@
+[Unit]
+Description=Inventario Multi-Instancia
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu/multi-instance-product-app
+Environment=PORT=8081
+Environment=HOST=127.0.0.1
+Environment=SESSION_SECRET=reemplaza-este-valor
+ExecStart=/usr/bin/node src/app.js
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

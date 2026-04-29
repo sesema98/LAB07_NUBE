@@ -1,0 +1,66 @@
+<%- include('../partials/header', { title }) %>
+
+<section class="panel">
+  <div class="panel-header">
+    <div>
+      <p class="section-kicker">Dashboard</p>
+      <h2>Productos registrados</h2>
+      <p class="muted">
+        Refresca la pagina varias veces o pasa por Nginx para identificar facilmente
+        que instancia atendio la respuesta.
+      </p>
+    </div>
+
+    <a href="/products/new" class="button">Crear producto</a>
+  </div>
+
+  <% if (products.length === 0) { %>
+    <div class="empty-state">
+      <h3>No hay productos cargados</h3>
+      <p>Crea el primero para probar el CRUD y la persistencia compartida.</p>
+    </div>
+  <% } else { %>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Actualizado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% products.forEach((product) => { %>
+            <tr>
+              <td><%= product.id %></td>
+              <td><%= product.name %></td>
+              <td>$<%= Number(product.price).toFixed(2) %></td>
+              <td><%= product.stock %></td>
+              <td><%= product.updated_at %></td>
+              <td>
+                <div class="action-row">
+                  <a href="/products/<%= product.id %>" class="button small secondary">Ver</a>
+                  <a href="/products/<%= product.id %>/edit" class="button small">Editar</a>
+                  <form method="post" action="/products/<%= product.id %>/delete">
+                    <button
+                      type="submit"
+                      class="button small danger"
+                      onclick="return confirm('Eliminar producto #<%= product.id %>?');"
+                    >
+                      Eliminar
+                    </button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</section>
+
+<%- include('../partials/footer') %>

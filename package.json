@@ -1,0 +1,26 @@
+{
+  "name": "multi-instance-product-app",
+  "version": "1.0.0",
+  "description": "Aplicacion web multi-instancia con Express, SQLite, login y CRUD de productos.",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "start:8081": "PORT=8081 node src/app.js",
+    "start:8082": "PORT=8082 node src/app.js",
+    "start:8083": "PORT=8083 node src/app.js",
+    "start:all": "concurrently -n api-8081,api-8082,api-8083 \"npm run start:8081\" \"npm run start:8082\" \"npm run start:8083\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "type": "commonjs",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "better-sqlite3": "^12.9.0",
+    "better-sqlite3-session-store": "^0.1.0",
+    "concurrently": "^9.2.1",
+    "ejs": "^5.0.2",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0"
+  }
+}

@@ -1,0 +1,63 @@
+<%- include('../partials/header', { title }) %>
+
+<section class="panel narrow-panel">
+  <div class="panel-header">
+    <div>
+      <p class="section-kicker">CRUD de productos</p>
+      <h2><%= heading %></h2>
+    </div>
+
+    <a href="/products" class="button secondary">Volver</a>
+  </div>
+
+  <% if (errors.length > 0) { %>
+    <div class="alert alert-error">
+      <strong>Corrige los siguientes errores:</strong>
+      <ul class="error-list">
+        <% errors.forEach((error) => { %>
+          <li><%= error %></li>
+        <% }) %>
+      </ul>
+    </div>
+  <% } %>
+
+  <form method="post" action="<%= formAction %>" class="stack-form">
+    <label>
+      <span>Nombre</span>
+      <input type="text" name="name" value="<%= product.name %>" required />
+    </label>
+
+    <label>
+      <span>Descripcion</span>
+      <textarea name="description" rows="4"><%= product.description %></textarea>
+    </label>
+
+    <label>
+      <span>Precio</span>
+      <input
+        type="number"
+        name="price"
+        min="0"
+        step="0.01"
+        value="<%= product.price %>"
+        required
+      />
+    </label>
+
+    <label>
+      <span>Stock</span>
+      <input
+        type="number"
+        name="stock"
+        min="0"
+        step="1"
+        value="<%= product.stock %>"
+        required
+      />
+    </label>
+
+    <button type="submit" class="button"><%= submitLabel %></button>
+  </form>
+</section>
+
+<%- include('../partials/footer') %>

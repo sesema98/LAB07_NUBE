@@ -1,0 +1,5 @@
+node_modules/
+data/*.db
+data/*.db-*
+cookies.txt
+npm-debug.log*

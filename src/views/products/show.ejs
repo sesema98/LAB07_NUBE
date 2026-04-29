@@ -1,0 +1,41 @@
+<%- include('../partials/header', { title }) %>
+
+<section class="panel narrow-panel">
+  <div class="panel-header">
+    <div>
+      <p class="section-kicker">Detalle</p>
+      <h2><%= product.name %></h2>
+      <p class="muted">Producto #<%= product.id %></p>
+    </div>
+
+    <div class="action-row">
+      <a href="/products" class="button secondary">Volver</a>
+      <a href="/products/<%= product.id %>/edit" class="button">Editar</a>
+    </div>
+  </div>
+
+  <div class="detail-grid">
+    <article class="detail-card">
+      <h3>Descripcion</h3>
+      <p><%= product.description || 'Sin descripcion.' %></p>
+    </article>
+
+    <article class="detail-card">
+      <h3>Precio</h3>
+      <p>$<%= Number(product.price).toFixed(2) %></p>
+    </article>
+
+    <article class="detail-card">
+      <h3>Stock</h3>
+      <p><%= product.stock %> unidades</p>
+    </article>
+
+    <article class="detail-card">
+      <h3>Fechas</h3>
+      <p>Creado: <%= product.created_at %></p>
+      <p>Actualizado: <%= product.updated_at %></p>
+    </article>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

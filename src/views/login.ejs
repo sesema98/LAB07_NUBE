@@ -1,0 +1,34 @@
+<%- include('partials/header', { title }) %>
+
+<section class="panel auth-panel">
+  <div>
+    <p class="section-kicker">Autenticacion</p>
+    <h2>Inicia sesion</h2>
+    <p class="muted">
+      La sesion se guarda en SQLite para que funcione incluso si Nginx redirige
+      tu siguiente peticion a otra instancia del backend.
+    </p>
+  </div>
+
+  <form method="post" action="/login" class="stack-form">
+    <label>
+      <span>Usuario</span>
+      <input type="text" name="username" placeholder="admin" required />
+    </label>
+
+    <label>
+      <span>Contrasena</span>
+      <input type="password" name="password" placeholder="admin123" required />
+    </label>
+
+    <button type="submit" class="button">Entrar</button>
+  </form>
+
+  <div class="note-card">
+    <strong>Credenciales iniciales</strong>
+    <p>Usuario: <code>admin</code></p>
+    <p>Contrasena: <code>admin123</code></p>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
