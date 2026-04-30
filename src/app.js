@@ -1,4 +1,5 @@
 const path = require('path');
+const os = require('os');
 const express = require('express');
 const session = require('express-session');
 const SqliteStoreFactory = require('better-sqlite3-session-store');
@@ -11,6 +12,7 @@ const PORT = Number.parseInt(process.env.PORT || '8081', 10);
 const HOST = process.env.HOST || '0.0.0.0';
 const SESSION_SECRET =
   process.env.SESSION_SECRET || 'change-this-secret-before-production';
+const INSTANCE_LABEL = process.env.INSTANCE_LABEL || os.hostname();
 
 initializeDatabase();
 
@@ -22,7 +24,9 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.use((req, res, next) => {
   res.locals.backendPort = PORT;
+  res.locals.backendInstance = INSTANCE_LABEL;
   res.setHeader('X-Backend-Port', String(PORT));
+  res.setHeader('X-Backend-Instance', INSTANCE_LABEL);
   return next();
 });
 
@@ -67,7 +71,15 @@ app.get('/health', (req, res) => {
   return res.status(200).json({
     status: 'OK',
     backendPort: PORT,
+    backendInstance: INSTANCE_LABEL,
     timestamp: new Date().toISOString()
+  });
+});
+
+app.get('/demo', (req, res) => {
+  return res.render('demo', {
+    title: 'Demo de balanceo',
+    requestTime: new Date().toISOString()
   });
 });
 
@@ -78,7 +90,8 @@ app.use((req, res) => {
   if (req.originalUrl.startsWith('/api/')) {
     return res.status(404).json({
       message: 'Recurso no encontrado.',
-      backendPort: PORT
+      backendPort: PORT,
+      backendInstance: INSTANCE_LABEL
     });
   }
 
@@ -99,7 +112,8 @@ app.use((error, req, res, next) => {
   if (req.originalUrl.startsWith('/api/')) {
     return res.status(500).json({
       message: 'Ocurrio un error inesperado.',
-      backendPort: PORT
+      backendPort: PORT,
+      backendInstance: INSTANCE_LABEL
     });
   }
 

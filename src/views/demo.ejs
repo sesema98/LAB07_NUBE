@@ -1,0 +1,34 @@
+<%- include('partials/header', { title }) %>
+
+<section class="panel narrow-panel">
+  <p class="section-kicker">Laboratorio</p>
+  <h2>Demo de backend activo</h2>
+  <p class="muted">
+    Esta pagina no requiere login y sirve para demostrar visualmente que el
+    balanceador esta enviando trafico a instancias distintas del backend.
+  </p>
+
+  <div class="detail-grid">
+    <article class="detail-card">
+      <h3>Backend que respondio</h3>
+      <p>Puerto <strong><%= backendPort %></strong></p>
+    </article>
+
+    <article class="detail-card">
+      <h3>Instancia</h3>
+      <p><strong><%= backendInstance %></strong></p>
+    </article>
+
+    <article class="detail-card">
+      <h3>Timestamp</h3>
+      <p><%= requestTime %></p>
+    </article>
+
+    <article class="detail-card">
+      <h3>Health check</h3>
+      <p>Prueba tambien <code>/health</code> para ver la respuesta JSON.</p>
+    </article>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

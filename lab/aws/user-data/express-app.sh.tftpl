@@ -1,0 +1,51 @@
+#!/bin/bash
+set -euxo pipefail
+
+dnf update -y
+dnf install -y git nodejs gcc-c++ make python3
+
+APP_DIR=/opt/login-crud-app
+APP_REPO_URL="${app_repo_url}"
+APP_BRANCH="${app_branch}"
+APP_PORT="${app_port}"
+SESSION_SECRET_VALUE="${session_secret}"
+
+TOKEN=$(curl -sX PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
+INSTANCE_ID=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/instance-id)
+AZ=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/placement/availability-zone)
+
+rm -rf "$APP_DIR"
+git clone --branch "$APP_BRANCH" "$APP_REPO_URL" "$APP_DIR"
+cd "$APP_DIR"
+npm ci
+
+mkdir -p "$APP_DIR/data"
+chown -R ec2-user:ec2-user "$APP_DIR"
+
+cat > /etc/login-crud-app.env <<EOF
+PORT=$APP_PORT
+HOST=0.0.0.0
+SESSION_SECRET=$SESSION_SECRET_VALUE
+INSTANCE_LABEL=$INSTANCE_ID-$AZ
+EOF
+
+cat > /etc/systemd/system/login-crud-app.service <<'EOF'
+[Unit]
+Description=Login CRUD App
+After=network.target
+
+[Service]
+Type=simple
+User=ec2-user
+WorkingDirectory=/opt/login-crud-app
+EnvironmentFile=/etc/login-crud-app.env
+ExecStart=/usr/bin/node src/app.js
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl enable --now login-crud-app

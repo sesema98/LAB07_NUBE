@@ -1,0 +1,18 @@
+#!/bin/bash
+dnf update -y
+dnf install -y httpd
+systemctl enable --now httpd
+
+TOKEN=$(curl -sX PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
+INSTANCE_ID=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/instance-id)
+AZ=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/placement/availability-zone)
+
+cat > /var/www/html/index.html <<EOF
+<html>
+  <body style="font-family:Arial;text-align:center;padding-top:4rem;">
+    <h1>${page_title}</h1>
+    <p><b>Instance ID:</b> $INSTANCE_ID</p>
+    <p><b>Availability Zone:</b> $AZ</p>
+  </body>
+</html>
+EOF

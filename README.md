@@ -228,3 +228,23 @@ http://3.14.254.120
 - Las tres instancias comparten la misma base SQLite ubicada en `data/app.db`.
 - Las sesiones tambien se guardan en SQLite, por eso el login sigue activo aunque Nginx envie la siguiente peticion a otro backend.
 - Todas las respuestas incluyen el encabezado `X-Backend-Port` para identificar la instancia que atendio la peticion.
+
+## Ruta de demostracion
+
+Si necesitas una pagina publica y simple para evidenciar el balanceo sin pasar por login, usa:
+
+- `http://localhost:8081/demo`
+- `http://localhost:8082/demo`
+- `http://localhost:8083/demo`
+- `http://localhost:8080/demo`
+
+La pagina `/demo` muestra claramente el `backendPort` que atendio la respuesta.
+
+## Material del laboratorio
+
+Se agrego una carpeta [lab/README.md](/Users/sergiosebastian/Documents/NUBES_AVANZADA/multi-instance-product-app/lab/README.md) con:
+
+- Parte A local con tres backends HTML simples y configuraciones de Nginx para `round robin`, `least_conn`, `ip_hash`, pesos y health checks pasivos.
+- Scripts de prueba para curl y Apache Benchmark.
+- Parte B en AWS con Terraform, user-data para EC2 web/API, ALB, Target Groups, path routing y Auto Scaling opcional.
+- Variante para publicar la app real de login + CRUD detras de un ALB en dos EC2: [lab/aws/terraform-crud-app/README.md](/Users/sergiosebastian/Documents/NUBES_AVANZADA/multi-instance-product-app/lab/aws/terraform-crud-app/README.md).
