@@ -1,5 +1,7 @@
 # Inventario Multi-Instancia
 
+> Para la presentacion del laboratorio, revisa primero [README-LABORATORIO.md](./README-LABORATORIO.md), donde la **Parte A** y la **Parte B** estan explicadas por separado.
+
 Aplicacion web completa con Node.js, Express y SQLite que incluye:
 
 - Login con usuario y contrasena.
